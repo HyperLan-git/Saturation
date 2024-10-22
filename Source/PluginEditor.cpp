@@ -25,8 +25,7 @@ selectionSlider(),
 inGainAttachment (std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "inGain", inGainSlider)),
 outGainAttachment (std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "outGain", outGainSlider)),
 selectionAttachment (std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "selection", selectionSlider)),
-currentButtonSelection(ButtonName::none),
-tanhDistortionAntialiased() {
+currentButtonSelection(ButtonName::none) {
           
     for (size_t i = 0; i < sliders.size(); ++i) {
         
@@ -63,7 +62,7 @@ void GUI::paint (juce::Graphics& g) {
             
     g.setColour(juce::Colours::white.withAlpha(0.4f));
     
-    const int selection = audioProcessor.getFloatKnobValue(ParameterNames::selection);
+    const int selection = static_cast<int>(audioProcessor.getFloatKnobValue(ParameterNames::selection));
 
     if (selection >= static_cast<int>(ButtonName::none)) return;
     
@@ -110,17 +109,7 @@ void GUI::paint (juce::Graphics& g) {
     juce::Path path;
     juce::Path path2;
     
-    if (selection == static_cast<int>(ButtonName::tanh)) {
-        
-        float sample = (0 - granularity * 0.5f) / 20;
-        
-        tanhDistortionAntialiased.setDriveAmount(decibelsToGain(inputGainValue));
-        
-        tanhDistortionAntialiased.process(sample, 0);
-    }
-    
     for (int i = 0; i < granularity; ++i) {
-        
         float y = scopeB - scopeHeight * 0.5f;
         float sample = (i - granularity * 0.5f) / 20;
 
@@ -164,7 +153,6 @@ void GUI::paint (juce::Graphics& g) {
         if (y > scopeB) y = scopeB;
         
         if (i == 0) {
-            
             path.startNewSubPath(scopeL, y);
             path2.startNewSubPath(scopeL, scopeT + (scopeB - scopeT) / 2);
             
@@ -299,7 +287,6 @@ ButtonName GUI::determineButton(const juce::MouseEvent &event) {
 
 
 void GUI::mouseDown (const juce::MouseEvent& event) {
-    
     previousMouseY = event.position.y;
     
     currentButtonSelection = determineButton(event);
@@ -318,7 +305,7 @@ void GUI::mouseDrag (const juce::MouseEvent& event) {
         currentButtonSelection != ButtonName::output)
         return;
         
-    const float delta = (previousMouseY - event.position.y) * 0.1;
+    const float delta = (previousMouseY - event.position.y) * 0.1f;
 
     if (currentButtonSelection == ButtonName::input) {
         
@@ -339,6 +326,6 @@ void GUI::mouseDrag (const juce::MouseEvent& event) {
 
 
 void GUI::mouseUp (const juce::MouseEvent& event) {
-    
+    event;
     currentButtonSelection = ButtonName::none;
 }

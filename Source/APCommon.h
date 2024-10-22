@@ -38,27 +38,24 @@ struct ParameterQuery {
 
 
 double linearToExponential(double linearValue, double minValue, double maxValue);
-double gainToDecibels(double gain);
-double decibelsToGain(double decibels);
+float gainToDecibels(float gain);
+float decibelsToGain(float decibels);
 std::string floatToStringWithTwoDecimalPlaces(float value);
 ParameterQuery queryParameter(ParameterNames paramName, const std::string& parameterStringName = "");
 
 class APFont {
 public:
     static juce::Font getFont() {
-        
         static juce::Font customTypeface = createFont();
         return customTypeface;
     }
 
 private:
     static juce::Font createFont() {
-        
         auto typeface = juce::Typeface::createSystemTypefaceFor(
             BinaryData::KnockoutFlyweight_otf, BinaryData::KnockoutFlyweight_otfSize);
 
         if (typeface != nullptr) {
-            
             return juce::Font(juce::FontOptions(typeface));
         }
         

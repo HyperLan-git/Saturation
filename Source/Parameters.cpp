@@ -22,14 +22,13 @@ std::unique_ptr<juce::RangedAudioParameter> newIntParam(ParameterNames paramName
                                                         int defaultValue) {
     
     ParameterQuery parameterQuery = queryParameter(paramName);
-
     
     return std::make_unique<juce::AudioParameterInt>(juce::ParameterID(parameterQuery.id, static_cast<int>(paramName) + 1),
                                                      parameterQuery.id,
                                                      minValue,
                                                      maxValue,
                                                      defaultValue,
-                                                     parameterQuery.label);
+                                                     juce::AudioParameterIntAttributes().withLabel(parameterQuery.label));
 }
 
 

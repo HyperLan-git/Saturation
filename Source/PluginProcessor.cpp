@@ -36,13 +36,12 @@ void APComp::prepareToPlay(double sampleRate, int samplesPerBlock) {
 
 
 float APComp::getFloatKnobValue(ParameterNames parameter) const {
-    
     return parameterList[static_cast<int>(parameter)]->get();
 }
 
 
 void APComp::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages) {
-    
+    midiMessages;
     juce::ScopedNoDenormals noDenormals;
 
     int totalNumInputChannels = getTotalNumInputChannels();
@@ -66,9 +65,9 @@ void APComp::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& m
     
     if (totalNumInputChannels > 1) mainBlock = originalBlock.getSubsetChannelBlock(0, 2);
     
-    juce::dsp::AudioBlock<float> oversampledBlock = oversampler->processSamplesUp (mainBlock);
+    juce::dsp::AudioBlock<float> oversampledBlock = oversampler->processSamplesUp(mainBlock);
     
-    const int selection = getFloatKnobValue(ParameterNames::selection);
+    const int selection = static_cast<int>(getFloatKnobValue(ParameterNames::selection));
   
     float* channelData[2];
     
@@ -144,7 +143,7 @@ void APComp::doHard (float& sample) {
     
     sample *= decibelsToGain(inputGain);
 
-    sample = sample / pow(1 + pow(sample, 8), 1.0 / 8);
+    sample = sample / powf(1 + powf(sample, 8), 1.0f / 8);
     
     sample *= decibelsToGain(outputGain);
 }
@@ -158,9 +157,9 @@ void APComp::doLog (float& sample) {
         
     sample = std::log(1 + std::abs(sample)) * sign;
     
-    sample *= 0.6;
+    sample *= 0.6f;
     
-    sample = sample / pow(1 + pow(sample, 8), 1.0 / 8);
+    sample = sample / powf(1 + powf(sample, 8), 1.0 / 8);
 
     sample *= decibelsToGain(outputGain);
 }
@@ -173,8 +172,8 @@ void APComp::doSqrt (float& sample) {
     float sign = sample > 0 ? 1.0f : -1.0f;
 
     sample = std::sqrt(std::abs(sample)) * sign;
-    sample *= 0.6;
-    sample = sample / pow(1 + pow(sample, 8), 1.0 / 8);
+    sample *= 0.6f;
+    sample = sample / powf(1 + powf(sample, 8), 1.0 / 8);
 
     sample *= decibelsToGain(outputGain);
 }
@@ -223,6 +222,7 @@ void APComp::doSquaredSine (float& sample) {
 
 
 void APComp::startOversampler(double sampleRate, int samplesPerBlock) {
+    sampleRate;
     
     oversampler.reset();
     
@@ -231,7 +231,7 @@ void APComp::startOversampler(double sampleRate, int samplesPerBlock) {
     oversampler->initProcessing(static_cast<size_t>(samplesPerBlock));
     oversampler->reset();
     
-    setLatencySamples(oversampler->getLatencyInSamples());
+    setLatencySamples(static_cast<int>(std::ceilf(oversampler->getLatencyInSamples())));
          
     oversamplerReady.store(true);
 }

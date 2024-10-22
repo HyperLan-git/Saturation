@@ -1,13 +1,24 @@
 #pragma once
 
 #include "PluginProcessor.h"
-#include "tanh.h"
 
+constexpr int ioRow1 = 349, ioRow2 = 430, ioColumn = 101;
+constexpr int ioRadius = 34;
+
+constexpr float selectionColumn = 259;
+constexpr float selectionFirstY = 159, selectionLastY = 446;
+constexpr float numberOfSelections = 8;
+constexpr float selectionRadius = 18;
+constexpr float spacingY = (selectionLastY - selectionFirstY) / (numberOfSelections - 1);
+
+constexpr int scopeL = 37, scopeR = 189,
+                scopeT = 132, scopeB = 274;
+
+constexpr int mathL = 230, mathR = 451,
+        mathT = 20, mathB = 70;
 
 class GUI  : public juce::AudioProcessorEditor, private juce::Timer {
-
-public:
-    
+  public:
     GUI (APComp&);
     ~GUI() override;
     
@@ -19,8 +30,7 @@ public:
     void mouseUp (const juce::MouseEvent& event) override;
     ButtonName determineButton(const juce::MouseEvent &event);
     
-private:
-    
+  private:
     APComp& audioProcessor;
                 
     juce::Image backgroundImage;
@@ -43,38 +53,14 @@ private:
     std::vector<std::pair<std::string, std::reference_wrapper<juce::Slider>>> sliders {
         {"inGainSlider",        std::ref(inGainSlider)},
         {"outGainSlider",       std::ref(outGainSlider)},
-        {"selectionSlider",       std::ref(selectionSlider)},
+        {"selectionSlider",     std::ref(selectionSlider)},
     };
 
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> inGainAttachment;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> outGainAttachment;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> selectionAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> inGainAttachment, outGainAttachment, selectionAttachment;
     
-    const int ioRow1 = 349;
-    const int ioRow2 = 430;
-    const int ioColumn = 101;
-    const int ioRadius = 34;
-    const int selectionColumn = 259;
-    const int selectionFirstY = 159;
-    const int selectionLastY = 446;
-    const int numberOfSelections = 8;
-    const int selectionRadius = 18;
-    const float spacingY = (selectionLastY - selectionFirstY) / (numberOfSelections - 1);
-    const int scopeL = 37;
-    const int scopeT = 132;
-    const int scopeR = 189;
-    const int scopeB = 274;
-    
-    const int mathL = 230;
-    const int mathT = 20;
-    const int mathR = 451;
-    const int mathB = 70;
-    
-    int previousMouseY;
+    float previousMouseY = 0;
     
     ButtonName currentButtonSelection;
-    
-    TanhDistortionAntialiased tanhDistortionAntialiased;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GUI)
 };

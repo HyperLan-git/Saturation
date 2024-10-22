@@ -6,7 +6,6 @@
 class APComp  : public juce::AudioProcessor {
     
 public:
-    
     APComp();
         
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
