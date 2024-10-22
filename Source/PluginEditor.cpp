@@ -113,37 +113,30 @@ void GUI::paint (juce::Graphics& g) {
         float y = scopeB - scopeHeight * 0.5f;
         float sample = (i - granularity * 0.5f) / 20;
 
+        // FIXME graphic shown
         switch (selection) {
             case static_cast<int>(ButtonName::tanh):
-                audioProcessor.doTanhStandard(sample);
                 break;
                 
             case static_cast<int>(ButtonName::sine):
-                audioProcessor.doSine(sample);
                 break;
                 
             case static_cast<int>(ButtonName::hard):
-                audioProcessor.doHard(sample);
                 break;
                 
             case static_cast<int>(ButtonName::log):
-                audioProcessor.doLog(sample);
                 break;
                 
             case static_cast<int>(ButtonName::sqrt):
-                audioProcessor.doSqrt(sample);
                 break;
                 
             case static_cast<int>(ButtonName::cube):
-                audioProcessor.doCube(sample);
                 break;
                
             case static_cast<int>(ButtonName::fold):
-                audioProcessor.doFold(sample);
                 break;
                 
             case static_cast<int>(ButtonName::squaredSine):
-                audioProcessor.doSquaredSine(sample);
                 break;
         }
         

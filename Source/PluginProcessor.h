@@ -31,14 +31,14 @@ public:
         
     float getFloatKnobValue(ParameterNames parameter) const;
     
-    void doSquaredSine  (float& sample);
-    void doFold         (float& sample);
-    void doCube         (float& sample);
-    void doSqrt         (float& sample);
-    void doLog          (float& sample);
-    void doHard         (float& sample);
-    void doSine         (float& sample);
-    void doTanhStandard (float& sample);
+    void doSquaredSine  (float* samples, size_t len);
+    void doFold         (float* samples, size_t len);
+    void doCube         (float* samples, size_t len);
+    void doSqrt         (float* samples, size_t len);
+    void doLog          (float* samples, size_t len);
+    void doHard         (float* samples, size_t len);
+    void doSine         (float* samples, size_t len);
+    void doTanhStandard (float* samples, size_t len);
 
     juce::AudioProcessorValueTreeState apvts;
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
