@@ -2,11 +2,10 @@
 
 #include <vector>
 
-
-class APComp  : public juce::AudioProcessor {
+class APSatur  : public juce::AudioProcessor {
     
 public:
-    APComp();
+    APSatur();
         
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
@@ -30,33 +29,25 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
         
     float getFloatKnobValue(ParameterNames parameter) const;
-    
-    void doSquaredSine  (float* samples, size_t len);
-    void doFold         (float* samples, size_t len);
-    void doCube         (float* samples, size_t len);
-    void doSqrt         (float* samples, size_t len);
-    void doLog          (float* samples, size_t len);
-    void doHard         (float* samples, size_t len);
-    void doSine         (float* samples, size_t len);
-    void doTanhStandard (float* samples, size_t len);
 
     juce::AudioProcessorValueTreeState apvts;
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+
+    float getInputGain() const { return decibelsToGain(getFloatKnobValue(ParameterNames::inGain)); }
+    float getOutputGain() const { return decibelsToGain(getFloatKnobValue(ParameterNames::outGain)); }
     
 private:
 
     float previousSample;
     
     void startOversampler(double sampleRate, int samplesPerBlock);
-
-    std::atomic<bool> oversamplerReady;
     
     float inputGain;
     float outputGain;
                 
-    std::unique_ptr<juce::dsp::Oversampling<float>> oversampler;
+    std::shared_ptr<juce::dsp::Oversampling<float>> oversampler;
     
     std::vector<juce::AudioParameterFloat*> parameterList;
         
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (APComp)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (APSatur)
 };

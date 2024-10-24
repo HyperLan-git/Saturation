@@ -16,6 +16,7 @@ enum class ButtonName {
     cube,
     fold,
     squaredSine,
+    asymmetricExp,
     input,
     output,
     none
@@ -45,6 +46,7 @@ ParameterQuery queryParameter(ParameterNames paramName, const std::string& param
 
 class APFont {
 public:
+    // TODO think of something against that memory leak
     static juce::Font getFont() {
         static juce::Font customTypeface = createFont();
         return customTypeface;

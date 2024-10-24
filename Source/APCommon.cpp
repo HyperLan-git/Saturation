@@ -21,7 +21,7 @@ float gainToDecibels(float gain) {
     
     if (gain > 1000) gain = 1000;
     
-    return 20.0 * std::log10f(gain);
+    return 20.0 * log10f(gain);
 }
 
 float decibelsToGain(float decibels) {
@@ -30,9 +30,8 @@ float decibelsToGain(float decibels) {
     
     if (decibels > 1000) decibels = 1000;
     
-    return std::powf(10.0, decibels / 20.0);
+    return powf(10.0, decibels / 20.0);
 }
-
 
 std::string floatToStringWithTwoDecimalPlaces(float value) {
     std::stringstream stream;

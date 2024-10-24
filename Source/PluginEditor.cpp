@@ -4,9 +4,10 @@
 #include "APCommon.h"
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "Saturation.h"
 
 
-GUI::GUI (APComp& p)
+GUI::GUI (APSatur& p)
 : AudioProcessorEditor (&p),
 audioProcessor (p),
 backgroundImage (juce::ImageFileFormat::loadFrom(BinaryData::saturation_png, BinaryData::saturation_pngSize)),
@@ -48,6 +49,7 @@ GUI::~GUI() {
     stopTimer();
 }
 
+constexpr int granularity = 152;
 
 void GUI::paint (juce::Graphics& g) {
     
@@ -99,48 +101,62 @@ void GUI::paint (juce::Graphics& g) {
                      juce::Justification::centred,
                      1);
 
-    const int scopeWidth = scopeR - scopeL;
-    const int scopeHeight = scopeB - scopeT;
-    const int granularity = 100;
-    const float grainWidth = scopeWidth / static_cast<float>(granularity);
+    constexpr int scopeWidth = scopeR - scopeL;
+    constexpr int scopeHeight = scopeB - scopeT;
+
+    constexpr float grainWidth = scopeWidth / static_cast<float>(granularity);
 
     g.setColour(juce::Colours::black.withAlpha(0.7f));
     
     juce::Path path;
     juce::Path path2;
+
+    const float iGain = audioProcessor.getInputGain(), oGain = audioProcessor.getOutputGain();
     
     for (int i = 0; i < granularity; ++i) {
         float y = scopeB - scopeHeight * 0.5f;
-        float sample = (i - granularity * 0.5f) / 20;
+        float sample = iGain * (i - granularity * 0.5f) / 20.f;
 
-        // FIXME graphic shown
+        // TODO put the switch outside of the loop
         switch (selection) {
             case static_cast<int>(ButtonName::tanh):
+                sample = doTanhStandard(sample);
                 break;
                 
             case static_cast<int>(ButtonName::sine):
+                sample = doSine(sample);
                 break;
                 
             case static_cast<int>(ButtonName::hard):
+                sample = doHard(sample);
                 break;
                 
             case static_cast<int>(ButtonName::log):
+                sample = doLog(sample);
                 break;
                 
             case static_cast<int>(ButtonName::sqrt):
+                sample = doSqrt(sample);
                 break;
                 
             case static_cast<int>(ButtonName::cube):
+                sample = doCube(sample);
                 break;
                
             case static_cast<int>(ButtonName::fold):
+                sample = doFold(sample);
                 break;
                 
             case static_cast<int>(ButtonName::squaredSine):
+                sample = doSquaredSine(sample);
+                break;
+
+            case static_cast<int>(ButtonName::asymmetricExp):
+                sample = doAsym(sample);
                 break;
         }
         
-        y += sample / 2.5f * scopeHeight;
+        y += sample * oGain / 2.5f * scopeHeight;
         
         if (y < scopeT) y = scopeT;
         if (y > scopeB) y = scopeB;
@@ -231,6 +247,16 @@ void GUI::paint (juce::Graphics& g) {
                               mathR - mathL,
                               mathB - mathT,
                               juce::RectanglePlacement::xMid);
+
+        case static_cast<int>(ButtonName::asymmetricExp):
+            // TODO add the image for x>0? harddist:hard(-x^8)
+            g.drawImageWithin(tanhImage,
+                              mathL,
+                              mathT,
+                              mathR - mathL,
+                              mathB - mathT,
+                              juce::RectanglePlacement::xMid);
+            break;
     }
 }
 
@@ -239,7 +265,7 @@ void GUI::resized() {}
 
 
 void GUI::timerCallback() {
-    
+    // XXX for now this is required to react to automation changes but best practice would be to repaint only when a change is detected
     repaint();
 }
 

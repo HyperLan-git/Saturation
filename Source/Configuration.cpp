@@ -3,43 +3,43 @@
 #include "PluginEditor.h"
 
 
-juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter() { return new APComp(); }
-const juce::String APComp::getName() const { return JucePlugin_Name; }
-bool APComp::acceptsMidi() const { return false; }
-bool APComp::producesMidi() const { return false; }
-bool APComp::isMidiEffect() const { return false; }
-double APComp::getTailLengthSeconds() const { return 0.0; }
-int APComp::getNumPrograms() { return 1; }
-int APComp::getCurrentProgram() { return 0; }
-void APComp::setCurrentProgram(int index) { index; }
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter() { return new APSatur(); }
+const juce::String APSatur::getName() const { return JucePlugin_Name; }
+bool APSatur::acceptsMidi() const { return false; }
+bool APSatur::producesMidi() const { return false; }
+bool APSatur::isMidiEffect() const { return false; }
+double APSatur::getTailLengthSeconds() const { return 0.0; }
+int APSatur::getNumPrograms() { return 1; }
+int APSatur::getCurrentProgram() { return 0; }
+void APSatur::setCurrentProgram(int index) { index; }
 
-const juce::String APComp::getProgramName(int index) {
+const juce::String APSatur::getProgramName(int index) {
     index;
     return {};
 }
 
-void APComp::changeProgramName (int index, const juce::String& newName) {
+void APSatur::changeProgramName (int index, const juce::String& newName) {
     index;
     newName;
 }
 
-bool APComp::hasEditor() const { return true; }
+bool APSatur::hasEditor() const { return true; }
 
-void APComp::releaseResources() {}
+void APSatur::releaseResources() {}
 
-bool APComp::isBusesLayoutSupported(const BusesLayout& layouts) const {
+bool APSatur::isBusesLayoutSupported(const BusesLayout& layouts) const {
     layouts;
     return true;
 }
 
-juce::AudioProcessorEditor* APComp::createEditor() { return new GUI (*this); }
+juce::AudioProcessorEditor* APSatur::createEditor() { return new GUI (*this); }
 
-void APComp::getStateInformation (juce::MemoryBlock& destData) {
+void APSatur::getStateInformation (juce::MemoryBlock& destData) {
     std::unique_ptr<juce::XmlElement> xml (apvts.state.createXml());
     copyXmlToBinary (*xml, destData);
 }
 
-void APComp::setStateInformation (const void* data, int sizeInBytes) {
+void APSatur::setStateInformation (const void* data, int sizeInBytes) {
     std::unique_ptr<juce::XmlElement> xml (getXmlFromBinary (data, sizeInBytes));
     if (xml != nullptr)
     {

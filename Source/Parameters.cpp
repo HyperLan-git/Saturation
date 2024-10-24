@@ -31,14 +31,15 @@ std::unique_ptr<juce::RangedAudioParameter> newIntParam(ParameterNames paramName
                                                      juce::AudioParameterIntAttributes().withLabel(parameterQuery.label));
 }
 
-
-juce::AudioProcessorValueTreeState::ParameterLayout APComp::createParameterLayout() {
+// TODO add oversampling and dc filter choice
+juce::AudioProcessorValueTreeState::ParameterLayout APSatur::createParameterLayout() {
     
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
 
     params.push_back(newFloatParam(ParameterNames::inGain,     0.0f,    120.0f,     0.0f  ));
     params.push_back(newFloatParam(ParameterNames::outGain,    -24.0f,   0.0f,     0.0f ));
-    params.push_back(newIntParam(ParameterNames::selection,     0,       7,         0     ));
+    // XXX this should be an AudioParameterChoice
+    params.push_back(newIntParam(ParameterNames::selection,     0,       8,         0     ));
 
     return { params.begin(), params.end() };
 }

@@ -19,7 +19,7 @@ constexpr int mathL = 230, mathR = 451,
 
 class GUI  : public juce::AudioProcessorEditor, private juce::Timer {
   public:
-    GUI (APComp&);
+    GUI (APSatur&);
     ~GUI() override;
     
     void paint (juce::Graphics&) override;
@@ -31,7 +31,7 @@ class GUI  : public juce::AudioProcessorEditor, private juce::Timer {
     ButtonName determineButton(const juce::MouseEvent &event);
     
   private:
-    APComp& audioProcessor;
+    APSatur& audioProcessor;
                 
     juce::Image backgroundImage;
     

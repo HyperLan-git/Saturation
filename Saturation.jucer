@@ -7,6 +7,7 @@
               pluginManufacturerCode="APMG" pluginCode="SATU">
   <MAINGROUP id="Hvoxjg" name="Saturation">
     <GROUP id="{75A4BD03-6758-0836-43A9-891F6FB902AD}" name="Source">
+      <FILE id="sEI4PP" name="Saturation.h" compile="0" resource="0" file="Source/Saturation.h"/>
       <FILE id="ZKTWYV" name="fold.png" compile="0" resource="1" file="Source/media/fold.png"/>
       <FILE id="rKszJF" name="cube.png" compile="0" resource="1" file="Source/media/cube.png"/>
       <FILE id="zjR9o9" name="sqrt.png" compile="0" resource="1" file="Source/media/sqrt.png"/>
